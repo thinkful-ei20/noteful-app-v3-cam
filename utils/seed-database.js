@@ -1,9 +1,12 @@
 'use strict';
 
+// This file exists for when we run tests. This file is executed before every test to ensure there is no funny-business with the data
+// Essentially, a clean set of data per test
+
 const mongoose = require('mongoose');
 
 const { MONGODB_URI } = require('../config');
-const Note = require('../models/note');
+const { Note } = require('../models/note');
 
 const seedNotes = require('../db/seed/notes');
 
