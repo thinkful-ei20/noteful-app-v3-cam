@@ -6,6 +6,8 @@ const { MONGODB_URI } = require('../config');
 
 const { Note } = require('../models/note');
 
+
+// FIND BY SEARCH TERM
 mongoose.connect(MONGODB_URI)
   .then(() => {
     const searchTerm = 'lady gaga';
@@ -34,9 +36,37 @@ mongoose.connect(MONGODB_URI)
     console.error(err);
   });
 
+// FIND BY ID
+mongoose.connect(MONGODB_URI)
+  .then(id => {
+    Note.findById(id);
+  })
+  .then(() => {
+    return mongoose.disconnect()
+      .then(() => {
+        console.info('Disconnected');
+      });
+  })
+  .catch(err => {
+    console.error(`ERROR: ${err.message}`);
+    console.error(err);
+  });
 
 
-// mongoose.connect(MONGODB_URI)
-//   .then(() => {
-//     Note.findById()
-//   })
+// CREATE
+mongoose.connect(MONGODB_URI)
+  .then(() => {
+    Note.create({
+      title: "scratch/queries.js note test"
+    });
+  })
+  .then(() => {
+    return mongoose.disconnect()
+      .then(() => {
+        console.info('Disconnected');
+      });
+  })
+  .catch(err => {
+    console.error(`ERROR: ${err.message}`);
+    console.error(err);
+  });

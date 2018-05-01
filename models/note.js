@@ -13,6 +13,14 @@ const noteSchema = mongoose.Schema({
   updatedAt: Date
 });
 
+noteSchema.set('toObject', {
+  transform: (doc, ret) => {
+    ret.id = ret._id;
+    delete ret._id;
+    delete ret.__v;
+  }
+});
+
 // Create a model
 // 'Note' parameter is used to create a collection, it will be lowercase and pluralized after the collection is created => 'notes'
 const Note = mongoose.model('Note', noteSchema);
