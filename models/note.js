@@ -9,7 +9,7 @@ const mongoose = require('mongoose');
 const noteSchema = mongoose.Schema({
   title: { type: String, required: true },
   content: String,
-  createdAt: Date,
+  createdAt: { type: Date, default: Date.now() },
   updatedAt: Date
 });
 

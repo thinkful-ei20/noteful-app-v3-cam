@@ -16,7 +16,7 @@ router.get('/', (req, res, next) => {
     filter.title = { $regex: re };
   }
 
-  return Note.find(filter)
+  Note.find(filter)
     .sort('created')
     .then(results => {
       res.json(results);
@@ -28,33 +28,74 @@ router.get('/', (req, res, next) => {
 
 /* ========== GET/READ A SINGLE ITEM ========== */
 router.get('/:id', (req, res, next) => {
-
   console.log('Get a Note by ID');
-  // res.json({ id: 1, title: 'Temp 1' });
+  const { id } = req.params;
 
+  Note.findById(id)
+    .then(results => {
+      res.json(results);
+    })
+    .catch(err => {
+      next(err);
+    });
 });
 
 /* ========== POST/CREATE AN ITEM ========== */
 router.post('/', (req, res, next) => {
-
   console.log('Create a Note');
-  // res.location('path/to/new/document').status(201).json({ id: 2, title: 'Temp 2' });
+  const { title } = req.body;
 
+  Note.create({
+    title: title
+  })
+    .then(results => {
+      res.location(`http://${req.headers.host}/notes/${results.id}`).status(201).json(results);
+    })
+    .catch(err => {
+      next(err);
+    });
 });
 
 /* ========== PUT/UPDATE A SINGLE ITEM ========== */
 router.put('/:id', (req, res, next) => {
-
   console.log('Update a Note');
-  // res.json({ id: 1, title: 'Updated Temp 1' });
+  const { id } = req.params;
+  console.log(id);
 
+  const updateObj = {};
+  const updateableFields = ['title', 'content'];
+
+  updateableFields.forEach(field => {
+    if (field in req.body) {
+      updateObj[field] = req.body[field];
+    }
+  });
+
+  Note.findByIdAndUpdate(id, {$set: { ...updateObj, updatedAt: Date.now() } })
+    .then(results => {
+      if (results) {
+        res.status(204).end();
+      } else {
+        next();
+      }
+    })
+    .catch(err => {
+      next(err);
+    });
 });
 
 /* ========== DELETE/REMOVE A SINGLE ITEM ========== */
 router.delete('/:id', (req, res, next) => {
-
   console.log('Delete a Note');
-  // res.status(204).end();
+  const { id } = req.params;
+
+  Note.findByIdAndRemove(id)
+  .then(results => {
+    res.status(204).end();
+  })
+  .catch(err => {
+    next(err);
+  })
 });
 
 module.exports = router;
