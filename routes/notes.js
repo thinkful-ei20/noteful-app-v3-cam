@@ -31,8 +31,13 @@ router.get('/:id', (req, res, next) => {
   console.log('Get a Note by ID');
   const { id } = req.params;
 
+  if (!mongoose.Types.ObjectId.isValid(id)) {
+    return next();
+  }
+
   Note.findById(id)
     .then(results => {
+      res.status(200);
       res.json(results);
     })
     .catch(err => {
@@ -43,10 +48,11 @@ router.get('/:id', (req, res, next) => {
 /* ========== POST/CREATE AN ITEM ========== */
 router.post('/', (req, res, next) => {
   console.log('Create a Note');
-  const { title } = req.body;
+  const { title, content } = req.body;
 
   Note.create({
-    title: title
+    title: title,
+    content: content
   })
     .then(results => {
       res.location(`http://${req.headers.host}/notes/${results.id}`).status(201).json(results);
@@ -60,7 +66,7 @@ router.post('/', (req, res, next) => {
 router.put('/:id', (req, res, next) => {
   console.log('Update a Note');
   const { id } = req.params;
-  console.log(id);
+  // console.log(id);
 
   const updateObj = {};
   const updateableFields = ['title', 'content'];
@@ -70,6 +76,10 @@ router.put('/:id', (req, res, next) => {
       updateObj[field] = req.body[field];
     }
   });
+
+  if (!mongoose.Types.ObjectId.isValid(id)) {
+    return next();
+  }
 
   Note.findByIdAndUpdate(id, {$set: { ...updateObj, updatedAt: Date.now() } })
     .then(results => {
