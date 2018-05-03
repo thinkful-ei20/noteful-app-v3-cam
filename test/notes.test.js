@@ -178,7 +178,7 @@ describe('PUT /api/notes/:id', () => {
     let data;
 
     // 1. Call the database
-    Note.findOne()
+    return Note.findOne()
       .then(_data => {
         data = _data;
         return chai.request(app)

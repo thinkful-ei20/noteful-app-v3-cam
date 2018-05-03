@@ -81,10 +81,10 @@ router.put('/:id', (req, res, next) => {
     return next();
   }
 
-  Note.findByIdAndUpdate(id, {$set: { ...updateObj, updatedAt: Date.now() } })
-    .then(results => {
-      if (results) {
-        res.status(204).end();
+  Note.findByIdAndUpdate(id, {$set: { ...updateObj, updatedAt: Date.now() } }, { new: true })
+    .then(result => {
+      if (result) {
+        res.json(result);
       } else {
         next();
       }
