@@ -13,11 +13,12 @@ const noteSchema = mongoose.Schema({
   updatedAt: { type: Date, default: Date.now }
 });
 
+// Mongo/Mongoose has properties on documents that we don't necessarily want to send out with our API (or want to rename). We're adding a method to rename `_id` to `id` and remove the `__v` property which is not a property/feature we care about
 noteSchema.set('toObject', {
   transform: (doc, ret) => {
     ret.id = ret._id;
-    delete ret._id;
-    delete ret.__v;
+    delete ret._id; // _mongo
+    delete ret.__v; // __mongoose 
   }
 });
 
