@@ -19,4 +19,4 @@ folderSchema.set('toObject', {
 
 const Folder = mongoose.model('Folder', folderSchema);
 
-module.export = { Folder };
+module.exports = { Folder };
