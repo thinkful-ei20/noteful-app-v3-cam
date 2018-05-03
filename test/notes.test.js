@@ -140,6 +140,7 @@ describe('GET /api/notes/:id', () => {
 });
 
 describe('POST /api/notes', () => {
+  // -----------------------------------------------------------------
   it('POST create and return a new item when provided valid data', () => {
     const newItem = {
       'title': 'The best article about cats ever!',
@@ -169,6 +170,7 @@ describe('POST /api/notes', () => {
 });
 
 describe('PUT /api/notes/:id', () => {
+  // -----------------------------------------------------------------
   it('PUT update a specific note when given valid data', () => {
     const updateItem = {
       'title': 'Something about Lizards',
@@ -199,6 +201,7 @@ describe('PUT /api/notes/:id', () => {
 });
 
 describe('DELETE /api/notes/:id', () => {
+  // -----------------------------------------------------------------
   it('DELETE by id', () => {
     let data;
 
