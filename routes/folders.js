@@ -18,7 +18,7 @@ router.get('/', (req, res, next) => {
   }
  
   Folder.find(filter)
-    .sort('created')
+    .sort({ 'updatedAt': 'desc' })
     .then(results => {
       res.json(results);
     })

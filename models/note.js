@@ -11,7 +11,8 @@ const noteSchema = mongoose.Schema({
   content: String,
   createdAt: { type: Date, default: Date.now },
   updatedAt: { type: Date, default: Date.now },
-  folderId: { type: mongoose.Schema.Types.ObjectId, ref: 'Folder '} // Informs mongoose of the relationship between Notes and Folders
+  folderId: { type: mongoose.Schema.Types.ObjectId, ref: 'Folder '}, // Informs mongoose of the relationship between Notes and Folders
+  tags: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Tag' }]
 });
 
 // Mongo/Mongoose has properties on documents that we don't necessarily want to send out with our API (or want to rename). We're adding a method to rename `_id` to `id` and remove the `__v` property which is not a property/feature we care about
