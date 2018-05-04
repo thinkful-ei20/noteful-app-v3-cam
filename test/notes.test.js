@@ -54,7 +54,7 @@ describe('GET /api/notes', () => {
   // -----------------------------------------------------------------
   it('GET via searchTerm', () => {
     // Search term to test with
-    const searchTerm = 'cats';
+    const searchTerm = 'gaga';
     // Regular Expression, made case insensitive
     const re = new RegExp(searchTerm, 'i'); 
 
@@ -70,6 +70,7 @@ describe('GET /api/notes', () => {
         expect(res).to.have.status(200);
         expect(res).to.be.json;
         expect(res.body).to.be.an('array');
+        expect(res.body).to.have.length(1);
         expect(res.body[0]).to.be.an('object');
         expect(res.body[0].id).to.equal(data[0].id);
       });

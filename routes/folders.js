@@ -89,6 +89,7 @@ router.put('/:id', (req, res, next) => {
     }
   });
 
+  // As long as the ID string matches the format for mongo, this won't fail
   if (!mongoose.Types.ObjectId.isValid(id)) {
     return next();
   }
