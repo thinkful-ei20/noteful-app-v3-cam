@@ -117,7 +117,7 @@ describe('GET /api/notes/:id', () => {
         expect(res).to.be.json;
 
         expect(res.body).to.be.an('object');
-        expect(res.body).to.have.keys('id', 'title', 'content', 'createdAt', 'updatedAt', 'folderId');
+        expect(res.body).to.have.keys('id', 'title', 'content', 'createdAt', 'updatedAt', 'folderId', 'tags');
 
         // 3. then compare the database results to API response
         expect(res.body.id).to.equal(data.id);
@@ -158,7 +158,7 @@ describe('POST /api/notes', () => {
         expect(res).to.have.header('location');
         expect(res).to.be.json;
         expect(res.body).to.be.a('object');
-        expect(res.body).to.have.keys('id', 'title', 'content', 'createdAt', 'updatedAt');
+        expect(res.body).to.have.keys('id', 'title', 'content', 'createdAt', 'updatedAt', 'tags');
         // 2. call the database
         return Note.findById(res.body.id);
       })
@@ -207,7 +207,7 @@ describe('PUT /api/notes/:id', () => {
         expect(res).to.have.status(200);
         expect(res).to.be.json;
         expect(res.body).to.be.a('object');
-        expect(res.body).to.have.keys('id', 'title', 'content', 'createdAt', 'updatedAt', 'folderId');
+        expect(res.body).to.have.keys('id', 'title', 'content', 'createdAt', 'updatedAt', 'folderId', 'tags');
 
         expect(res.body.id).to.equal(data.id);
         expect(res.body.title).to.equal(updateItem.title);

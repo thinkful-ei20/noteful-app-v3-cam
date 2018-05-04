@@ -35,7 +35,7 @@ after(() => {
 });
 
 // TESTS ====================================================================
-describe('GET /api/folders', () => {
+describe('GET /api/folders', () => { 
   // -----------------------------------------------------------------
   it('GET all folders', () => {
     return Promise.all([
@@ -183,6 +183,7 @@ describe('PUT /api/folders', () => {
 });
 
 describe('DELETE /api/folders/:id', () => {
+  // -----------------------------------------------------------------
   it('DELETE by id', () => {
     let data;
 

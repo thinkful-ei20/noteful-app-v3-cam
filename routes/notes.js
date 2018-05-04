@@ -8,7 +8,7 @@ const { Note } = require('../models/note'); // schema/model
 /* ========== GET/READ ALL NOTES ========== */
 router.get('/', (req, res, next) => {
   console.log('Get All Notes');
-  const { searchTerm, folderId } = req.query;
+  const { searchTerm, folderId, tags } = req.query;
   const filter = {};
 
   if (searchTerm) {
@@ -20,7 +20,12 @@ router.get('/', (req, res, next) => {
     filter.folderId = folderId;
   }
 
+  if (tags) {
+    filter.tagId = tags.id;
+  }
+
   Note.find(filter)
+    .populate('tags')
     .sort({ 'updatedAt': 'desc' })
     .then(results => {
       res.json(results);
@@ -42,6 +47,7 @@ router.get('/:id', (req, res, next) => {
   }
 
   Note.findById(id)
+    .populate('tags')
     .then(results => {
       if (results) {
         res.status(200);
@@ -58,7 +64,7 @@ router.get('/:id', (req, res, next) => {
 /* ========== POST/CREATE AN NOTE ========== */
 router.post('/', (req, res, next) => {
   console.log('Create a Note');
-  const { title, content, folderId } = req.body;
+  const { title, content, folderId, tags } = req.body;
 
   if (!title) {
     const err = new Error('Missing `title` in request body');
@@ -85,7 +91,7 @@ router.post('/', (req, res, next) => {
 router.put('/:id', (req, res, next) => {
   console.log('Update a Note');
   const { id } = req.params;
-  const { title, content, folderId } = req.body;
+  const { title, content, folderId, tags } = req.body;
   // console.log(id);
 
   if (!title) {
@@ -99,8 +105,6 @@ router.put('/:id', (req, res, next) => {
     err.status = 400;
     return next(err);
   }
-
-  
 
   const updateObj = {};
   const updateableFields = ['title', 'content'];
@@ -123,6 +127,7 @@ router.put('/:id', (req, res, next) => {
       } else {
         next();
       }
+      return Note.save();
     })
     .catch(err => {
       next(err);
