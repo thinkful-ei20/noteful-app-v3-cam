@@ -5,7 +5,7 @@ const router = express.Router(); // router
 const mongoose = require('mongoose'); // mongoose
 const { Note } = require('../models/note'); // schema/model
 
-/* ========== GET/READ ALL ITEM ========== */
+/* ========== GET/READ ALL NOTES ========== */
 router.get('/', (req, res, next) => {
   console.log('Get All Notes');
   const { searchTerm } = req.query;
@@ -26,7 +26,7 @@ router.get('/', (req, res, next) => {
     });
 });
 
-/* ========== GET/READ A SINGLE ITEM ========== */
+/* ========== GET/READ A SINGLE NOTE ========== */
 router.get('/:id', (req, res, next) => {
   console.log('Get a Note by ID');
   const { id } = req.params;
@@ -45,10 +45,16 @@ router.get('/:id', (req, res, next) => {
     });
 });
 
-/* ========== POST/CREATE AN ITEM ========== */
+/* ========== POST/CREATE AN NOTE ========== */
 router.post('/', (req, res, next) => {
   console.log('Create a Note');
   const { title, content } = req.body;
+
+  if (!title) {
+    const err = new Error('Missing `title` in request body');
+    err.status = 400;
+    return next(err);
+  }
 
   Note.create({
     title: title,
@@ -62,7 +68,7 @@ router.post('/', (req, res, next) => {
     });
 });
 
-/* ========== PUT/UPDATE A SINGLE ITEM ========== */
+/* ========== PUT/UPDATE A SINGLE NOTE ========== */
 router.put('/:id', (req, res, next) => {
   console.log('Update a Note');
   const { id } = req.params;
@@ -80,7 +86,8 @@ router.put('/:id', (req, res, next) => {
   if (!mongoose.Types.ObjectId.isValid(id)) {
     return next();
   }
-
+  
+  // find by id and update, and return updated version, not the original
   Note.findByIdAndUpdate(id, {$set: { ...updateObj, updatedAt: Date.now() } }, { new: true })
     .then(result => {
       if (result) {
@@ -94,7 +101,7 @@ router.put('/:id', (req, res, next) => {
     });
 });
 
-/* ========== DELETE/REMOVE A SINGLE ITEM ========== */
+/* ========== DELETE/REMOVE A SINGLE NOTE ========== */
 router.delete('/:id', (req, res, next) => {
   console.log('Delete a Note');
   const { id } = req.params;

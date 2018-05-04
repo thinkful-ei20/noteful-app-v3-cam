@@ -33,7 +33,6 @@ after(() => {
   return mongoose.disconnect();
 });
 
-
 // TESTS ====================================================================
 describe('GET /api/notes', () => {
   it('Get all notes', () => {
@@ -117,7 +116,7 @@ describe('GET /api/notes/:id', () => {
         expect(res).to.be.json;
 
         expect(res.body).to.be.an('object');
-        expect(res.body).to.have.keys('id', 'title', 'content', 'createdAt', 'updatedAt');
+        expect(res.body).to.have.keys('id', 'title', 'content', 'createdAt', 'updatedAt', 'folderId');
 
         // 3. then compare the database results to API response
         expect(res.body.id).to.equal(data.id);
@@ -167,6 +166,22 @@ describe('POST /api/notes', () => {
         expect(res.body.content).to.equal(data.content);
       });
   });
+
+  it('POST error if no title field', () => {
+    const newItem = {
+      'content': 'This will flag an error due to no title field'
+    };
+
+    return chai.request(app)
+      .post('/api/notes')
+      .send(newItem)
+      .then(res => {
+        expect(res).to.have.status(400);
+        expect(res).to.be.json;
+        expect(res.body).to.be.an('object');
+        expect(res.body.message).to.equal('Missing `title` in request body');
+      });
+  });
 });
 
 describe('PUT /api/notes/:id', () => {
@@ -191,7 +206,7 @@ describe('PUT /api/notes/:id', () => {
         expect(res).to.have.status(200);
         expect(res).to.be.json;
         expect(res.body).to.be.a('object');
-        expect(res.body).to.have.keys('id', 'title', 'content', 'createdAt', 'updatedAt');
+        expect(res.body).to.have.keys('id', 'title', 'content', 'createdAt', 'updatedAt', 'folderId');
 
         expect(res.body.id).to.equal(data.id);
         expect(res.body.title).to.equal(updateItem.title);
